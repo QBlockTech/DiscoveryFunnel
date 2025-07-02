@@ -1,7 +1,10 @@
+const prompts = require('../../config/prompts');
+
 class IceService {
   constructor() {
     this.apiKey = process.env.ICE_API_KEY;
     this.baseUrl = process.env.ICE_BASE_URL;
+    this.prompts = prompts;
 
     if (!this.apiKey) {
       throw new Error('ICE_API_KEY environment variable is required');
@@ -48,17 +51,8 @@ class IceService {
    * @returns {Promise<Array>} Array of hot selling product categories/types
    */
   async getHotSellingProducts() {
-    const prompt = `Analyze current market trends and identify the top 10 hot selling product categories for 3D printing in 2024. 
-    Focus on consumer products that are:
-    1. In high demand
-    2. Suitable for 3D printing
-    3. Have commercial viability
-    4. Popular in online marketplaces
-    
-    Return the response as a JSON array of objects with 'category', 'demand_score' (1-10), and 'reason' fields.`;
-
     try {
-      const response = await this.makeRequest('gpt-4', prompt);
+      const response = await this.makeRequest('gpt-4', this.prompts.hotSellingProducts);
       return this.parseHotProductsResponse(response);
     } catch (error) {
       console.error('Error getting hot selling products:', error);
@@ -74,18 +68,8 @@ class IceService {
   async vetProductViability(products) {
     const productList = products.map(p => `${p.name}: ${p.description} (Price: $${p.price})`).join('\n');
     
-    const prompt = `Analyze the following 3D printable products for market viability and commercial potential:
-
-${productList}
-
-For each product, evaluate:
-1. Market demand potential (1-10)
-2. 3D printing feasibility (1-10)
-3. Competition level (1-10, where 10 is highly competitive)
-4. Profit margin potential (1-10)
-5. Overall viability score (1-10)
-
-Return the response as a JSON array of objects with 'product_name', 'demand_score', 'feasibility_score', 'competition_score', 'profit_score', 'overall_score', and 'recommendation' fields.`;
+    // Replace the placeholder in the prompt template with actual product data
+    const prompt = this.prompts.productViability.replace('{productList}', productList);
 
     try {
       const response = await this.makeRequest('gpt-4', prompt);
