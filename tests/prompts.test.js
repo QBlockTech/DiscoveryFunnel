@@ -28,4 +28,14 @@ describe('Prompts Configuration', () => {
     expect(renderedPrompt).toContain(testProductList);
     expect(renderedPrompt).not.toContain('{productList}');
   });
+
+  test('should contain etsyTrendsAssistant prompt', () => {
+    expect(prompts.etsyTrendsAssistant).toBeDefined();
+    expect(typeof prompts.etsyTrendsAssistant).toBe('string');
+    expect(prompts.etsyTrendsAssistant.length).toBeGreaterThan(0);
+    expect(prompts.etsyTrendsAssistant).toContain('Etsy product trends assistant');
+    expect(prompts.etsyTrendsAssistant).toContain('top 4 Etsy product niches');
+    expect(prompts.etsyTrendsAssistant).toContain('Gross Merchandise Sales');
+    expect(prompts.etsyTrendsAssistant).toContain('Markdown tables');
+  });
 });
