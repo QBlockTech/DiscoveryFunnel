@@ -67,6 +67,29 @@ ICE_BASE_URL=https://api.ice-service.com
 NEON_DATABASE_URL=postgresql://username:password@hostname:port/database
 ```
 
+## Configuration
+
+### Prompts Configuration
+
+AI prompts used by the ICE service are configured in `config/prompts.js`. This file contains:
+
+- **hotSellingProducts**: Prompt for identifying trending 3D printable product categories
+- **productViability**: Template prompt for analyzing product market viability (uses `{productList}` placeholder)
+
+You can customize these prompts to adjust the AI analysis behavior:
+
+```javascript
+// config/prompts.js
+const prompts = {
+  hotSellingProducts: `Your custom prompt for trend analysis...`,
+  productViability: `Your custom prompt for viability analysis...
+  
+  {productList}
+  
+  Your analysis instructions...`
+};
+```
+
 ## API Endpoints
 
 ### Health Check
